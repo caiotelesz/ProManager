@@ -6,7 +6,7 @@ import lombok.*;
 
 import java.time.LocalDate;
 
-import static jakarta.persistence.GenerationType.AUTO;
+import static jakarta.persistence.GenerationType.UUID;
 
 @Entity
 @Table(name = "project")
@@ -17,7 +17,7 @@ import static jakarta.persistence.GenerationType.AUTO;
 public class Project {
 
     @Id
-    @GeneratedValue(strategy = AUTO)
+    @GeneratedValue(strategy = UUID)
     @Column(name = "id", nullable = false, length = 36)
     private String id;
 
