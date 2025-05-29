@@ -1,4 +1,4 @@
-package com.caio.project_management.infrastructure.dto.controller;
+package com.caio.project_management.infrastructure.controller;
 
 public final class RestResource {
 

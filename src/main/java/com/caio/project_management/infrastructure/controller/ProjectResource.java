@@ -1,4 +1,4 @@
-package com.caio.project_management.infrastructure.dto.controller;
+package com.caio.project_management.infrastructure.controller;
 
 import com.caio.project_management.domain.entity.Project;
 import com.caio.project_management.domain.service.ProjectService;
