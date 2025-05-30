@@ -6,10 +6,12 @@ import com.caio.project_management.domain.repository.ProjectRepository;
 import com.caio.project_management.infrastructure.dto.SaveProjectDataDTO;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class ProjectService {
 
     private final ProjectRepository projectRepository;
@@ -27,6 +29,8 @@ public class ProjectService {
                 .build();
 
         projectRepository.save(project);
+
+        log.info("Saved project : {}", project);
 
         return project;
     }
