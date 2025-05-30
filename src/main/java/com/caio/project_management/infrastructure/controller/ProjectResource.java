@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.net.URI;
 
-import static com.caio.project_management.infrastructure.dto.controller.RestResource.PATH_PROJECTS;
+import static com.caio.project_management.infrastructure.controller.RestResource.PATH_PROJECTS;
 
 @Controller
 @RequestMapping(PATH_PROJECTS)
