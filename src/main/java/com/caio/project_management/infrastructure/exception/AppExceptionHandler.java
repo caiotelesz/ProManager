@@ -1,0 +1,63 @@
+package com.caio.project_management.infrastructure.exception;
+
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.context.request.ServletWebRequest;
+import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
+import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
+
+@ControllerAdvice
+public class AppExceptionHandler extends ResponseEntityExceptionHandler {
+
+    @ExceptionHandler(value = Exception.class)
+    public ResponseEntity<Object> handleRequestExceptions(RequestException ex, WebRequest request) {
+        return handleException(
+                ex,
+                ex.getErrorCode(),
+                ex.getMessage(),
+                BAD_REQUEST,
+                request
+        );
+    }
+
+    @ExceptionHandler(value = Exception.class)
+    public ResponseEntity<Object> handleGenericExceptions(Exception ex, WebRequest request) {
+        return handleException(
+                ex,
+                null,
+                ex.getMessage(),
+                INTERNAL_SERVER_ERROR,
+                request
+        );
+    }
+
+    private ResponseEntity<Object> handleException(
+            Exception ex,
+            String errorCode,
+            String message,
+            HttpStatus status,
+            WebRequest request
+    ) {
+        ServletWebRequest servletWebRequest = (ServletWebRequest) request;
+
+        return handleExceptionInternal(
+                ex,
+                RestError
+                        .builder()
+                        .errorCode(errorCode)
+                        .errorMessage(message)
+                        .stautus(status.value())
+                        .path(servletWebRequest.getRequest().getRequestURI())
+                        .build(),
+                new HttpHeaders(),
+                status,
+                request
+        );
+    }
+}
