@@ -4,6 +4,7 @@ import com.caio.project_management.domain.entity.Project;
 import com.caio.project_management.domain.service.ProjectService;
 import com.caio.project_management.infrastructure.dto.ProjectDTO;
 import com.caio.project_management.infrastructure.dto.SaveProjectDataDTO;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -23,7 +24,7 @@ public class ProjectResource {
     private final ProjectService projectService;
 
     @PostMapping
-    public ResponseEntity<ProjectDTO> saveProject(@RequestBody SaveProjectDataDTO saveProjectData) {
+    public ResponseEntity<ProjectDTO> saveProject(@RequestBody @Valid SaveProjectDataDTO saveProjectData) {
 
         Project project = projectService.saveProject(saveProjectData);
 

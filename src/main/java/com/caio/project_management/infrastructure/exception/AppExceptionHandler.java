@@ -22,7 +22,7 @@ import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 public class AppExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(value = RequestException.class)
-    public ResponseEntity<Object> handleRequestExceptions(RequestException ex, WebRequest request) {
+    public ResponseEntity<Object> handleRequestException(RequestException ex, WebRequest request) {
         return handleException(
                 ex,
                 ex.getErrorCode(),
@@ -34,7 +34,7 @@ public class AppExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(value = Exception.class)
-    public ResponseEntity<Object> handleGenericExceptions(Exception ex, WebRequest request) {
+    public ResponseEntity<Object> handleGenericException(Exception ex, WebRequest request) {
         return handleException(
                 ex,
                 null,

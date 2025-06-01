@@ -12,5 +12,5 @@ public class RestError {
     private final String errorMessage;
     private final List<String> details;
     private final int status;
-    private String path;
+    private final String path;
 }
