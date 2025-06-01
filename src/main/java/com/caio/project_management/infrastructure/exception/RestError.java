@@ -3,11 +3,14 @@ package com.caio.project_management.infrastructure.exception;
 import lombok.Builder;
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 @Builder
 public class RestError {
     private final String errorCode;
     private final String errorMessage;
-    private final int stautus;
+    private final List<String> details;
+    private final int status;
     private String path;
 }
