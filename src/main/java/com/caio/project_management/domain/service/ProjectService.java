@@ -2,6 +2,7 @@ package com.caio.project_management.domain.service;
 
 import com.caio.project_management.domain.entity.Project;
 import com.caio.project_management.domain.enums.ProjectStatus;
+import com.caio.project_management.domain.exception.ProjectNotFoundException;
 import com.caio.project_management.domain.repository.ProjectRepository;
 import com.caio.project_management.infrastructure.dto.SaveProjectDataDTO;
 import jakarta.transaction.Transactional;
@@ -31,6 +32,16 @@ public class ProjectService {
         projectRepository.save(project);
 
         log.info("Saved project : {}", project);
+
+        return project;
+    }
+
+    public Project loadProject(String projectId) {
+        Project project = projectRepository
+                .findById(projectId)
+                .orElseThrow(() -> new ProjectNotFoundException(projectId));
+
+        log.info("Loaded project : {}", project);
 
         return project;
     }
