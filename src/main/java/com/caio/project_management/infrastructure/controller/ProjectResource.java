@@ -37,8 +37,7 @@ public class ProjectResource {
 
         Project project = projectService.loadProject(projectId);
 
-        return ResponseEntity
-                .ok(ProjectDTO.create(project));
+        return ResponseEntity.ok(ProjectDTO.create(project));
     }
 
     // DELETE project/id
@@ -47,5 +46,16 @@ public class ProjectResource {
 
         projectService.deleteProject(projectId);
         return ResponseEntity.noContent().build();
+    }
+
+    // UPDATE project/id
+    @PutMapping("/{id}")
+    public ResponseEntity<ProjectDTO> updateProject(
+            @PathVariable("id") String projectId,
+            @RequestBody @Valid SaveProjectDataDTO saveProjectData
+    ) {
+        Project project = projectService.updateProject(projectId, saveProjectData);
+
+        return ResponseEntity.ok(ProjectDTO.create(project));
     }
 }

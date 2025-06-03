@@ -2,6 +2,7 @@ package com.caio.project_management.domain.service;
 
 import com.caio.project_management.domain.entity.Project;
 import com.caio.project_management.domain.enums.ProjectStatus;
+import com.caio.project_management.domain.exception.InvalidProjectStatusException;
 import com.caio.project_management.domain.exception.ProjectNotFoundException;
 import com.caio.project_management.domain.repository.ProjectRepository;
 import com.caio.project_management.infrastructure.dto.SaveProjectDataDTO;
@@ -52,5 +53,28 @@ public class ProjectService {
         projectRepository.delete(project);
 
         log.info("Deleted project : {}", project);
+    }
+
+    @Transactional
+    public Project updateProject(String projectId, SaveProjectDataDTO saveProjectData) {
+        Project project = loadProject(projectId);
+
+        project.setName(saveProjectData.getName());
+        project.setDescription(saveProjectData.getDescription());
+        project.setInitialDate(saveProjectData.getInitialDate());
+        project.setFinalDate(saveProjectData.getFinalDate());
+        project.setStatus(convertStringToProjectStatus(saveProjectData.getStatus()));
+
+        log.info("Updated project : {}", project);
+
+        return project;
+    }
+
+    private ProjectStatus convertStringToProjectStatus(String projectStatus) {
+        try {
+            return ProjectStatus.valueOf(projectStatus.toUpperCase());
+        } catch (IllegalArgumentException | NullPointerException e) {
+            throw new InvalidProjectStatusException(projectStatus);
+        }
     }
 }
