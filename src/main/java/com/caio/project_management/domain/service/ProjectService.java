@@ -45,4 +45,12 @@ public class ProjectService {
 
         return project;
     }
+
+    public void deleteProject(String projectId) {
+
+        Project project = loadProject(projectId);
+        projectRepository.delete(project);
+
+        log.info("Deleted project : {}", project);
+    }
 }
