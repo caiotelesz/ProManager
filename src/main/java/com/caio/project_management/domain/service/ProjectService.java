@@ -2,6 +2,7 @@ package com.caio.project_management.domain.service;
 
 import com.caio.project_management.domain.entity.Project;
 import com.caio.project_management.domain.enums.ProjectStatus;
+import com.caio.project_management.domain.exception.DuplicateProjectException;
 import com.caio.project_management.domain.exception.InvalidProjectStatusException;
 import com.caio.project_management.domain.exception.ProjectNotFoundException;
 import com.caio.project_management.domain.repository.ProjectRepository;
@@ -10,6 +11,8 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -20,6 +23,10 @@ public class ProjectService {
 
     @Transactional
     public Project saveProject(SaveProjectDataDTO saveProjectData) {
+
+        if(existsProjectWithName(saveProjectData.getName(), null)){
+            throw new DuplicateProjectException(saveProjectData.getName());
+        }
 
         Project project = Project
                 .builder()
@@ -57,6 +64,11 @@ public class ProjectService {
 
     @Transactional
     public Project updateProject(String projectId, SaveProjectDataDTO saveProjectData) {
+
+        if(existsProjectWithName(saveProjectData.getName(), projectId)){
+            throw new DuplicateProjectException(saveProjectData.getName());
+        }
+
         Project project = loadProject(projectId);
 
         project.setName(saveProjectData.getName());
@@ -76,5 +88,11 @@ public class ProjectService {
         } catch (IllegalArgumentException | NullPointerException e) {
             throw new InvalidProjectStatusException(projectStatus);
         }
+    }
+
+    private boolean existsProjectWithName(String projectName, String idToExclude) {
+        return projectRepository.findByName(projectName)
+                .filter(p -> !Objects.equals(p.getId(), idToExclude))
+                .isPresent();
     }
 }
