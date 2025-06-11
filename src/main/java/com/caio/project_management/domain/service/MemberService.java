@@ -3,10 +3,17 @@ package com.caio.project_management.domain.service;
 import com.caio.project_management.domain.entity.Member;
 import com.caio.project_management.domain.exception.MemberNotFoundException;
 import com.caio.project_management.domain.repository.MemberRepository;
+import com.caio.project_management.infrastructure.dto.MemberDTO;
 import com.caio.project_management.infrastructure.dto.SaveMemberDataDTO;
+import com.caio.project_management.infrastructure.dto.SaveProjectDataDTO;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.UUID;
 
@@ -34,9 +41,15 @@ public class MemberService {
         return member;
     }
 
-    public Member loadMemberById(String memberId) {
+    public Member loadMember(String memberId) {
         return memberRepository
                 .findByIdAndDeleted(memberId, false)
                 .orElseThrow(() -> new MemberNotFoundException(memberId));
+    }
+
+    public void deleteMember(String memberId) {
+        Member member = loadMember(memberId);
+
+        member.setDeleted(true);
     }
 }

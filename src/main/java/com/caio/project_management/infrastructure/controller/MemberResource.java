@@ -32,9 +32,16 @@ public class MemberResource {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<MemberDTO> loadMemberById(@PathVariable("id") String id) {
-        Member member = memberService.loadMemberById(id);
+    public ResponseEntity<MemberDTO> loadMember(@PathVariable("id") String id) {
+        Member member = memberService.loadMember(id);
 
         return ResponseEntity.ok(MemberDTO.create(member));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteMember(@PathVariable("id") String id) {
+        memberService.deleteMember(id);
+
+        return ResponseEntity.noContent().build();
     }
 }
