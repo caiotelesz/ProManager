@@ -1,6 +1,7 @@
 package com.caio.project_management.domain.service;
 
 import com.caio.project_management.domain.entity.Member;
+import com.caio.project_management.domain.exception.MemberNotFoundException;
 import com.caio.project_management.domain.repository.MemberRepository;
 import com.caio.project_management.infrastructure.dto.SaveMemberDataDTO;
 import lombok.RequiredArgsConstructor;
@@ -31,5 +32,11 @@ public class MemberService {
         log.info("Member created: {}", member);
 
         return member;
+    }
+
+    public Member loadMemberById(String memberId) {
+        return memberRepository
+                .findByIdAndDeleted(memberId, false)
+                .orElseThrow(() -> new MemberNotFoundException(memberId));
     }
 }

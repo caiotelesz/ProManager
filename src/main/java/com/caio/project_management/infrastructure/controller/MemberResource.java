@@ -8,9 +8,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 
@@ -24,12 +22,19 @@ public class MemberResource {
     private final MemberService memberService;
 
     @PostMapping
-    public ResponseEntity<MemberDTO> create(@RequestBody @Valid SaveMemberDataDTO saveMemberData) {
+    public ResponseEntity<MemberDTO> createMember(@RequestBody @Valid SaveMemberDataDTO saveMemberData) {
 
         Member member = memberService.createMember(saveMemberData);
 
         return ResponseEntity
                 .created(URI.create(PATH_MEMBERS + "/" + member.getId()))
                 .body(MemberDTO.create(member));
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<MemberDTO> loadMemberById(@PathVariable("id") String id) {
+        Member member = memberService.loadMemberById(id);
+
+        return ResponseEntity.ok(MemberDTO.create(member));
     }
 }
