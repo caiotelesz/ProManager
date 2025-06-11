@@ -52,4 +52,13 @@ public class MemberService {
 
         member.setDeleted(true);
     }
+
+    public Member updateMember(String memberId, SaveMemberDataDTO saveMemberData) {
+        Member member = loadMember(memberId);
+
+        member.setName(saveMemberData.getName());
+        member.setEmail(saveMemberData.getEmail());
+
+        return member;
+    }
 }

@@ -44,4 +44,13 @@ public class MemberResource {
 
         return ResponseEntity.noContent().build();
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<MemberDTO> updateMember(
+            @PathVariable("id") String id,
+            @RequestBody @Valid SaveMemberDataDTO saveMemberData
+    ) {
+        Member member = memberService.updateMember(id, saveMemberData);
+        return ResponseEntity.ok(MemberDTO.create(member));
+    }
 }
