@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -73,6 +74,21 @@ public class MemberService {
         member.setEmail(saveMemberData.getEmail());
 
         return member;
+    }
+
+    public List<Member> findMembers(String email) {
+        List<Member> members;
+
+        if(Objects.isNull(email)) {
+            members = memberRepository.findAllAndNotDeleted();
+        } else {
+            members = memberRepository
+                    .findByEmailAndDeleted(email, false)
+                    .map(List::of)
+                    .orElse(List.of());
+        }
+
+        return members;
     }
 
     private boolean existsMemberWithEmail(String email, String idToExclude) {

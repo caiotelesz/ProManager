@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.util.List;
 
 import static com.caio.project_management.infrastructure.controller.RestResource.PATH_MEMBERS;
 
@@ -52,5 +53,16 @@ public class MemberResource {
     ) {
         Member member = memberService.updateMember(id, saveMemberData);
         return ResponseEntity.ok(MemberDTO.create(member));
+    }
+
+    @GetMapping
+    public ResponseEntity<List<MemberDTO>> findMembers(
+            @RequestParam(value = "email", required = false) String email
+    ) {
+        List<Member> members = memberService.findMembers(email);
+
+        return ResponseEntity.ok(
+                members.stream().map(MemberDTO::create).toList()
+        );
     }
 }
