@@ -31,7 +31,6 @@ public class ProjectResource {
                 .body(ProjectDTO.create(project));
     }
 
-    // GET project/id
     @GetMapping("/{id}")
     public ResponseEntity<ProjectDTO> loadProject(@PathVariable("id") String projectId) {
 
@@ -40,7 +39,6 @@ public class ProjectResource {
         return ResponseEntity.ok(ProjectDTO.create(project));
     }
 
-    // DELETE project/id
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteProject(@PathVariable("id") String projectId) {
 
@@ -48,7 +46,6 @@ public class ProjectResource {
         return ResponseEntity.noContent().build();
     }
 
-    // UPDATE project/id
     @PutMapping("/{id}")
     public ResponseEntity<ProjectDTO> updateProject(
             @PathVariable("id") String projectId,
