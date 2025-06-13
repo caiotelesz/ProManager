@@ -1,7 +1,7 @@
 package com.caio.project_management.domain.service;
 
 import com.caio.project_management.domain.entity.Member;
-import com.caio.project_management.domain.exception.DuplicateProjectException;
+import com.caio.project_management.domain.exception.DuplicateMemberException;
 import com.caio.project_management.domain.exception.MemberNotFoundException;
 import com.caio.project_management.domain.repository.MemberRepository;
 import com.caio.project_management.infrastructure.dto.SaveMemberDataDTO;
@@ -24,7 +24,7 @@ public class MemberService {
     @Transactional
     public Member createMember(SaveMemberDataDTO saveMemberData) {
         if(existsMemberWithEmail(saveMemberData.getEmail(), null)) {
-            throw new DuplicateProjectException(saveMemberData.getEmail());
+            throw new DuplicateMemberException(saveMemberData.getEmail());
         }
 
         Member member = Member
@@ -64,7 +64,7 @@ public class MemberService {
     @Transactional
     public Member updateMember(String memberId, SaveMemberDataDTO saveMemberData) {
         if(existsMemberWithEmail(saveMemberData.getEmail(), memberId)) {
-            throw new DuplicateProjectException(saveMemberData.getEmail());
+            throw new DuplicateMemberException(saveMemberData.getEmail());
         }
 
         Member member = loadMember(memberId);
