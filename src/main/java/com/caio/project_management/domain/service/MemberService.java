@@ -4,18 +4,11 @@ import com.caio.project_management.domain.entity.Member;
 import com.caio.project_management.domain.exception.DuplicateProjectException;
 import com.caio.project_management.domain.exception.MemberNotFoundException;
 import com.caio.project_management.domain.repository.MemberRepository;
-import com.caio.project_management.infrastructure.dto.MemberDTO;
 import com.caio.project_management.infrastructure.dto.SaveMemberDataDTO;
-import com.caio.project_management.infrastructure.dto.SaveProjectDataDTO;
 import jakarta.transaction.Transactional;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 import java.util.Objects;
@@ -44,15 +37,19 @@ public class MemberService {
 
         memberRepository.save(member);
 
-        log.info("Member created: {}", member);
+        log.info("Saved member: {}", member);
 
         return member;
     }
 
     public Member loadMember(String memberId) {
-        return memberRepository
+        Member member = memberRepository
                 .findByIdAndDeleted(memberId, false)
                 .orElseThrow(() -> new MemberNotFoundException(memberId));
+
+        log.info("Loaded member: {}", member);
+
+        return member;
     }
 
     @Transactional
@@ -60,6 +57,8 @@ public class MemberService {
         Member member = loadMember(memberId);
 
         member.setDeleted(true);
+
+        log.info("Deleted member: {}", member);
     }
 
     @Transactional
@@ -72,6 +71,8 @@ public class MemberService {
 
         member.setName(saveMemberData.getName());
         member.setEmail(saveMemberData.getEmail());
+
+        log.info("Updated member: {}", member);
 
         return member;
     }
@@ -87,6 +88,8 @@ public class MemberService {
                     .map(List::of)
                     .orElse(List.of());
         }
+
+        log.info("Found {} members", members.size());
 
         return members;
     }
