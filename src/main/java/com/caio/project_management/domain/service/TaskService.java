@@ -2,6 +2,7 @@ package com.caio.project_management.domain.service;
 
 import com.caio.project_management.domain.entity.Task;
 import com.caio.project_management.domain.enums.TaskStatus;
+import com.caio.project_management.domain.exception.InvalidTaskStatusException;
 import com.caio.project_management.domain.exception.TaskNotFoundException;
 import com.caio.project_management.domain.repository.TaskRepository;
 import com.caio.project_management.infrastructure.dto.SaveTaskDataDTO;
@@ -51,5 +52,28 @@ public class TaskService {
         taskRepository.delete(task);
 
         log.info("Deleted task {}", task);
+    }
+
+    @Transactional
+    public Task updateTask(String taskId, SaveTaskDataDTO saveTaskData) {
+        Task task = loadTask(taskId);
+
+        task.setTitle(saveTaskData.getTitle());
+        task.setDescription(saveTaskData.getDescription());
+        task.setNumberOfDays(saveTaskData.getNumberOfDays());
+        task.setStatus(convertStringToStatus(saveTaskData.getStatus()));
+
+        log.info("Updated task {}", task);
+
+        return task;
+    }
+
+
+    private TaskStatus convertStringToStatus(String statusStr) {
+        try {
+            return TaskStatus.valueOf(statusStr.toUpperCase());
+        } catch (IllegalArgumentException | NullPointerException e) {
+            throw new InvalidTaskStatusException(statusStr);
+        }
     }
 }
