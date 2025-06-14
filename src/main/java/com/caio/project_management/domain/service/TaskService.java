@@ -44,4 +44,12 @@ public class TaskService {
 
         return task;
     }
+
+    @Transactional
+    public void deleteTask(String taskId) {
+        Task task = loadTask(taskId);
+        taskRepository.delete(task);
+
+        log.info("Deleted task {}", task);
+    }
 }
