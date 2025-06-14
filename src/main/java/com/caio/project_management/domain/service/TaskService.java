@@ -34,4 +34,14 @@ public class TaskService {
 
         return task;
     }
+
+    public Task loadTask(String taskId) {
+        Task task = taskRepository
+                .findById(taskId)
+                .orElseThrow(() -> new TaskNotFoundException(taskId));
+
+        log.info("Loaded task {}", task);
+
+        return task;
+    }
 }

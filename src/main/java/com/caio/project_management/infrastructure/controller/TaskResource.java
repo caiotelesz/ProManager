@@ -8,9 +8,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 
@@ -31,4 +29,13 @@ public class TaskResource {
                 .created(URI.create(PATH_TASKS + "/" + task.getId()))
                 .body(TaskDTO.create(task));
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<TaskDTO> loadTask(@PathVariable("id") String taskId) {
+        Task task = taskService.loadTask(taskId);
+
+        return ResponseEntity.ok(TaskDTO.create(task));
+    }
+
+
 }
