@@ -7,6 +7,8 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import lombok.Data;
 
+import java.util.Optional;
+
 @Data
 public class TaskDTO {
     private final String id;
@@ -24,8 +26,8 @@ public class TaskDTO {
                 task.getDescription(),
                 task.getNumberOfDays(),
                 task.getStatus(),
-                ProjectDTO.create(task.getProject()),
-                MemberDTO.create(task.getAssignedMember())
+                Optional.ofNullable(task.getProject()).map(ProjectDTO::create).orElse(null),
+                Optional.ofNullable(task.getAssignedMember()).map(MemberDTO::create).orElse(null)
         );
     }
 }
