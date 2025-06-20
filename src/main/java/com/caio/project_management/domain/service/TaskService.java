@@ -14,7 +14,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -82,6 +84,20 @@ public class TaskService {
         log.info("Updated task {}", task);
 
         return task;
+    }
+
+    public List<Task> findTasks(
+            String projectId,
+            String memberId,
+            String statusStr,
+            String partialTitle
+    ) {
+        return taskRepository.find(
+                projectId,
+                memberId,
+                Optional.ofNullable(statusStr).map(this::convertStringToStatus).orElse(null),
+                partialTitle
+        );
     }
 
     private TaskStatus convertStringToStatus(String statusStr) {

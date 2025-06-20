@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.util.List;
 
 import static com.caio.project_management.infrastructure.controller.RestResource.PATH_TASKS;
 
@@ -52,5 +53,16 @@ public class TaskResource {
         Task task = taskService.updateTask(taskId, saveTaskData);
 
         return ResponseEntity.ok(TaskDTO.create(task));
+    }
+
+    @GetMapping
+    public ResponseEntity<List<TaskDTO>> findTasks(
+            @RequestParam(value = "projectId", required = false) String projectId,
+            @RequestParam(value = "memberId", required = false) String memberId,
+            @RequestParam(value = "status", required = false) String statusStr,
+            @RequestParam(value = "partialTitle", required = false) String partialTitle
+    ) {
+        List<Task> task = taskService.findTasks(projectId, memberId, statusStr, partialTitle);
+        return ResponseEntity.ok(task.stream().map(TaskDTO::create).toList());
     }
 }
