@@ -12,6 +12,8 @@ import com.caio.project_management.infrastructure.dto.TaskDTO;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -86,17 +88,19 @@ public class TaskService {
         return task;
     }
 
-    public List<Task> findTasks(
+    public Page<Task> findTasks(
             String projectId,
             String memberId,
             String statusStr,
-            String partialTitle
+            String partialTitle,
+            Integer page
     ) {
         return taskRepository.find(
                 projectId,
                 memberId,
                 Optional.ofNullable(statusStr).map(this::convertStringToStatus).orElse(null),
-                partialTitle
+                partialTitle,
+                PageRequest.of(Optional.ofNullable(page).orElse(0), 3)
         );
     }
 

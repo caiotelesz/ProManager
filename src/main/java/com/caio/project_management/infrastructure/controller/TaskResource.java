@@ -6,6 +6,7 @@ import com.caio.project_management.infrastructure.dto.SaveTaskDataDTO;
 import com.caio.project_management.infrastructure.dto.TaskDTO;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -60,9 +61,10 @@ public class TaskResource {
             @RequestParam(value = "projectId", required = false) String projectId,
             @RequestParam(value = "memberId", required = false) String memberId,
             @RequestParam(value = "status", required = false) String statusStr,
-            @RequestParam(value = "partialTitle", required = false) String partialTitle
+            @RequestParam(value = "partialTitle", required = false) String partialTitle,
+            @RequestParam(value = "page", required = false) Integer page
     ) {
-        List<Task> task = taskService.findTasks(projectId, memberId, statusStr, partialTitle);
+        Page<Task> task = taskService.findTasks(projectId, memberId, statusStr, partialTitle, page);
         return ResponseEntity.ok(task.stream().map(TaskDTO::create).toList());
     }
 }
