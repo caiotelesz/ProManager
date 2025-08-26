@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -93,14 +94,18 @@ public class TaskService {
             String memberId,
             String statusStr,
             String partialTitle,
-            Integer page
+            Integer page,
+            String description,
+            List<String> properties
     ) {
+        Sort sort = Sort.by(Sort.Direction.DESC, "title");
+
         return taskRepository.find(
                 projectId,
                 memberId,
                 Optional.ofNullable(statusStr).map(this::convertStringToStatus).orElse(null),
                 partialTitle,
-                PageRequest.of(Optional.ofNullable(page).orElse(0), 3)
+                PageRequest.of(Optional.ofNullable(page).orElse(0), 3, sort)
         );
     }
 

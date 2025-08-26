@@ -4,6 +4,7 @@ import com.caio.project_management.domain.entity.Task;
 import com.caio.project_management.domain.service.TaskService;
 import com.caio.project_management.infrastructure.dto.SaveTaskDataDTO;
 import com.caio.project_management.infrastructure.dto.TaskDTO;
+import com.caio.project_management.infrastructure.util.SortProperties;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -62,9 +63,20 @@ public class TaskResource {
             @RequestParam(value = "memberId", required = false) String memberId,
             @RequestParam(value = "status", required = false) String statusStr,
             @RequestParam(value = "partialTitle", required = false) String partialTitle,
-            @RequestParam(value = "page", required = false) Integer page
-    ) {
-        Page<Task> task = taskService.findTasks(projectId, memberId, statusStr, partialTitle, page);
+            @RequestParam(value = "page", required = false) Integer page,
+            @RequestParam(value = "direction", required = false) String direction,
+            @RequestParam(value = "sort", required = false)SortProperties properties
+            ) {
+        Page<Task> task = taskService.findTasks(
+                projectId,
+                memberId,
+                statusStr,
+                partialTitle,
+                page,
+                direction,
+                properties.getSortProperties()
+        );
+
         return ResponseEntity.ok(task.stream().map(TaskDTO::create).toList());
     }
 }
