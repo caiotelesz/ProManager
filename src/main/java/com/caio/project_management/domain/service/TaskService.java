@@ -21,6 +21,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+import static com.caio.project_management.infrastructure.util.PaginationHelper.createPageable;
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -95,17 +97,15 @@ public class TaskService {
             String statusStr,
             String partialTitle,
             Integer page,
-            String description,
+            String directionStr,
             List<String> properties
     ) {
-        Sort sort = Sort.by(Sort.Direction.DESC, "title");
-
         return taskRepository.find(
                 projectId,
                 memberId,
                 Optional.ofNullable(statusStr).map(this::convertStringToStatus).orElse(null),
                 partialTitle,
-                PageRequest.of(Optional.ofNullable(page).orElse(0), 3, sort)
+                createPageable(page, 3, directionStr, properties)
         );
     }
 

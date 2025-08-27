@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Optional;
 
 import static com.caio.project_management.infrastructure.controller.RestResource.PATH_TASKS;
 
@@ -74,7 +75,9 @@ public class TaskResource {
                 partialTitle,
                 page,
                 direction,
-                properties.getSortProperties()
+                Optional.ofNullable(properties)
+                        .map(SortProperties::getSortProperties)
+                        .orElse(List.of())
         );
 
         return ResponseEntity.ok(task.stream().map(TaskDTO::create).toList());
